@@ -1,0 +1,54 @@
+#include <stdio.h>
+
+int fibonacci_recursive(int n, int* fib);
+int fibonacci_dynamic(int n, int* fib);
+
+int main() {
+    int n, i;
+
+    printf("Enter the number of Fibonacci numbers to generate: ");
+    scanf("%d", &n);
+
+    int fib_recursive[n];
+    int fib_dynamic[n];
+
+    printf("Using recursive method:\n");
+    for (i = 0; i < n; i++) {
+        fib_recursive[i] = fibonacci_recursive(i, fib_recursive);
+        printf("%d ", fib_recursive[i]);
+    }
+
+    printf("\nUsing dynamic programming method:\n");
+    for (i = 0; i < n; i++) {
+        fib_dynamic[i] = fibonacci_dynamic(i, fib_dynamic);
+        printf("%d ", fib_dynamic[i]);
+    }
+
+    return 0;
+}
+
+int fibonacci_recursive(int n, int* fib) {
+    if (n <= 1) {
+        return n;
+    } else if (fib[n] != 0) {
+        return fib[n];
+    } else {
+        fib[n] = fibonacci_recursive(n - 1, fib) + fibonacci_recursive(n - 2, fib);
+        return fib[n];
+    }
+}
+
+int fibonacci_dynamic(int n, int* fib) {
+    int i;
+
+    // Set the first two Fibonacci numbers
+    fib[0] = 0;
+    fib[1] = 1;
+
+    for (i = 2; i <= n; i++) {
+        // Calculate the current Fibonacci number using the previous two
+        fib[i] = fib[i-1] + fib[i-2];
+    }
+
+    return fib[n];
+}

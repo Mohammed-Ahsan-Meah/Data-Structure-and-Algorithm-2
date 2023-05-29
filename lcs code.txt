@@ -1,0 +1,66 @@
+LCS using DP and Table
+#include <stdio.h> 
+#include <string.h> 
+ 
+#define MAX_LEN 100 
+ 
+int max(int a, int b) { 
+    return (a > b) ? a : b; 
+} 
+ 
+void lcs(char X[], char Y[], int m, int n) { 
+    int L[m + 1][n + 1]; 
+    int i, j; 
+ 
+    // Build L[m+1][n+1] in bottom up fashion 
+    for (i = 0; i <= m; i++) { 
+        for (j = 0; j <= n; j++) { 
+            if (i == 0 || j == 0) { 
+                L[i][j] = 0; 
+            } else if (X[i - 1] == Y[j - 1]) { 
+                L[i][j] = L[i - 1][j - 1] + 1; 
+            } else { 
+                L[i][j] = max(L[i - 1][j], L[i][j - 1]); 
+            } 
+        } 
+    } 
+ 
+    // The length of the longest common subsequence 
+    int length = L[m][n]; 
+    printf("Length of LCS: %d\n", length); 
+ 
+    // Print the longest common subsequence 
+    char lcs[length + 1]; 
+    lcs[length] = '\0'; 
+    i = m, j = n; 
+    while (i > 0 && j > 0) { 
+        if (X[i - 1] == Y[j - 1]) { 
+            lcs[length - 1] = X[i - 1]; 
+            i--; 
+            j--; 
+            length--; 
+        } else if (L[i - 1][j] > L[i][j - 1]) { 
+            i--; 
+        } else { 
+            j--; 
+        } 
+    } 
+ 
+    printf("Longest Common Subsequence: %s\n", lcs); 
+} 
+ 
+int main() { 
+    char X[MAX_LEN], Y[MAX_LEN]; 
+    printf("Enter first string: "); 
+    fgets(X, MAX_LEN, stdin); 
+    X[strcspn(X, "\n")] = '\0'; // Remove trailing newline character 
+ 
+    printf("Enter second string: "); 
+    fgets(Y, MAX_LEN, stdin); 
+    Y[strcspn(Y, "\n")] = '\0'; // Remove trailing newline character 
+ 
+    int m = strlen(X); 
+    int n = strlen(Y); 
+    lcs(X, Y, m, n); 
+    return 0; 
+}
